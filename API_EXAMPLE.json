@@ -1,0 +1,308 @@
+{
+  "eden_songs_api": {
+    "version": "1.0",
+    "description": "API для создания песен-исцелений на основе Eden Songs Library",
+    "license": "CC0",
+    "endpoints": {
+      "generate_song": {
+        "method": "POST",
+        "url": "/api/generate-song",
+        "description": "Генерирует структуру песни на основе текста боли",
+        "input_schema": {
+          "type": "object",
+          "properties": {
+            "pain_text": {
+              "type": "string",
+              "description": "Текст боли пользователя",
+              "example": "Я устал, работа убивает меня"
+            },
+            "language": {
+              "type": "string",
+              "description": "Язык текста",
+              "enum": ["ru", "en", "es", "de", "fr", "it", "pt", "ar", "hi", "ko", "ja", "tr", "uk", "bn", "vi", "th", "id", "pl", "zh"],
+              "default": "ru"
+            },
+            "style_preference": {
+              "type": "string",
+              "description": "Предпочтение стиля",
+              "enum": ["cinematic", "folk", "ambient", "hymn", "lullaby"],
+              "default": "cinematic"
+            },
+            "trauma_type": {
+              "type": "string",
+              "description": "Тип травмы (опционально)",
+              "enum": ["loss", "betrayal", "shame", "anger", "fear", "loneliness", "body", "identity", "childhood", "love", "work", "family", "health", "money", "other"],
+              "default": "other"
+            }
+          },
+          "required": ["pain_text"]
+        },
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "song_id": {
+              "type": "string",
+              "description": "Уникальный ID песни"
+            },
+            "song_title": {
+              "type": "string",
+              "description": "Название песни",
+              "example": "Тихий сад"
+            },
+            "lyrics": {
+              "type": "object",
+              "properties": {
+                "intro": {
+                  "type": "string",
+                  "description": "Вступление"
+                },
+                "verse_1": {
+                  "type": "string",
+                  "description": "Первый куплет"
+                },
+                "chorus": {
+                  "type": "string",
+                  "description": "Припев"
+                },
+                "verse_2": {
+                  "type": "string",
+                  "description": "Второй куплет"
+                },
+                "bridge": {
+                  "type": "string",
+                  "description": "Бридж"
+                },
+                "final_chorus": {
+                  "type": "string",
+                  "description": "Финальный припев"
+                },
+                "outro": {
+                  "type": "string",
+                  "description": "Завершение"
+                }
+              }
+            },
+            "style": {
+              "type": "string",
+              "description": "Стиль музыки",
+              "example": "cinematic folk"
+            },
+            "instruments": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Рекомендуемые инструменты",
+              "example": ["acoustic guitar", "cello", "piano", "breath"]
+            },
+            "vocal_style": {
+              "type": "string",
+              "description": "Стиль вокала",
+              "example": "male lead + female harmony + child whisper"
+            },
+            "tempo": {
+              "type": "integer",
+              "description": "Темп в BPM",
+              "example": 65
+            },
+            "key": {
+              "type": "string",
+              "description": "Тональность",
+              "example": "minor"
+            },
+            "suno_prompt": {
+              "type": "string",
+              "description": "Готовый промт для Suno AI"
+            },
+            "archetypes_used": {
+              "type": "array",
+              "items": {
+                "type": "string"
+              },
+              "description": "Использованные архетипы",
+              "example": ["tree", "breath", "water"]
+            },
+            "mantra": {
+              "type": "string",
+              "description": "Мантра для завершения",
+              "example": "Любить. Петь. Сажать."
+            }
+          }
+        }
+      },
+      "get_song_library": {
+        "method": "GET",
+        "url": "/api/song-library",
+        "description": "Возвращает список базовых песен из библиотеки",
+        "output_schema": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "string",
+                "description": "ID песни"
+              },
+              "title": {
+                "type": "string",
+                "description": "Название песни"
+              },
+              "trauma_type": {
+                "type": "string",
+                "description": "Тип травмы"
+              },
+              "description": {
+                "type": "string",
+                "description": "Описание песни"
+              },
+              "archetype": {
+                "type": "string",
+                "description": "Архетип природы"
+              }
+            }
+          }
+        }
+      },
+      "get_trauma_map": {
+        "method": "GET",
+        "url": "/api/trauma-map",
+        "description": "Возвращает карту травм",
+        "output_schema": {
+          "type": "object",
+          "properties": {
+            "traumas": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  },
+                  "text": {
+                    "type": "string"
+                  },
+                  "age_group": {
+                    "type": "string"
+                  },
+                  "category": {
+                    "type": "string"
+                  }
+                }
+              }
+            },
+            "systemic_beliefs": {
+              "type": "array",
+              "items": {
+                "type": "object",
+                "properties": {
+                  "category": {
+                    "type": "string"
+                  },
+                  "beliefs": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "antivirus_song": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "example_requests": {
+      "basic_song_generation": {
+        "request": {
+          "pain_text": "Я устал, работа убивает меня",
+          "language": "ru",
+          "style_preference": "cinematic"
+        },
+        "response": {
+          "song_id": "eden_001",
+          "song_title": "Тихий сад",
+          "lyrics": {
+            "intro": "(Whisper, breath only — 4s silence)",
+            "verse_1": "Я устал.\nНе от работы — от того,\nчто я забыл, как дышать.",
+            "chorus": "Любить.\nПеть.\nСажать.",
+            "verse_2": "На столе — кипа бумаг.\nНа стене — часы, которые не бьют.",
+            "bridge": "(Pause 3 bars — only wind and heartbeat)",
+            "final_chorus": "Любить.\nПеть.\nСажать.\n(Repeat 3x — layered, fading)",
+            "outro": "(One long exhale — 5 seconds)\nThen silence.\nThen —\nЛюбить.\nПеть.\nСажать."
+          },
+          "style": "cinematic folk",
+          "instruments": ["acoustic guitar", "cello", "breath", "heartbeat"],
+          "vocal_style": "male lead + female harmony + child whisper",
+          "tempo": 65,
+          "key": "minor",
+          "suno_prompt": "Cinematic folk song about exhaustion and finding peace. Male lead voice, slow tempo, minor key. Acoustic guitar and cello. End with whispered mantra.",
+          "archetypes_used": ["tree", "breath", "water"],
+          "mantra": "Любить. Петь. Сажать."
+        }
+      },
+      "collective_song": {
+        "request": {
+          "pain_text": "Мне страшно. Я злюсь. Я устал.",
+          "language": "ru",
+          "style_preference": "hymn"
+        },
+        "response": {
+          "song_id": "eden_002",
+          "song_title": "Мы вместе",
+          "lyrics": {
+            "intro": "(Three voices, distant, coming together)",
+            "verse_1": "Мне страшно.\nЯ злюсь.\nЯ устал.",
+            "chorus": "Но мы вместе.\nМы дышим.\nМы живём.",
+            "verse_2": "В страхе — сила.\nВ злости — огонь.\nВ усталости — покой.",
+            "bridge": "(All voices unite in harmony)",
+            "final_chorus": "Мы вместе.\nМы дышим.\nМы живём.\n(Repeat 3x — growing in strength)",
+            "outro": "(Three voices, fading into one)\nЛюбить.\nПеть.\nСажать."
+          },
+          "style": "ancient hymn",
+          "instruments": ["choir", "organ", "bells"],
+          "vocal_style": "three-part harmony → unified choir",
+          "tempo": 70,
+          "key": "minor",
+          "suno_prompt": "Ancient hymn for three voices becoming one. Choir style, organ and bells. About unity in diversity of emotions.",
+          "archetypes_used": ["light", "breath", "tree"],
+          "mantra": "Любить. Петь. Сажать."
+        }
+      }
+    },
+    "integration_examples": {
+      "suno_ai": {
+        "description": "Интеграция с Suno AI",
+        "code": "// JavaScript example\nconst generateSong = async (painText) => {\n  const response = await fetch('/api/generate-song', {\n    method: 'POST',\n    headers: { 'Content-Type': 'application/json' },\n    body: JSON.stringify({ pain_text: painText })\n  });\n  \n  const song = await response.json();\n  \n  // Отправляем в Suno AI\n  const sunoResponse = await fetch('https://api.suno.ai/generate', {\n    method: 'POST',\n    headers: { 'Authorization': 'Bearer YOUR_SUNO_TOKEN' },\n    body: JSON.stringify({\n      prompt: song.suno_prompt,\n      style: song.style,\n      tempo: song.tempo,\n      key: song.key\n    })\n  });\n  \n  return await sunoResponse.json();\n};"
+      },
+      "chatgpt_integration": {
+        "description": "Интеграция с ChatGPT",
+        "code": "// Python example\nimport openai\n\ndef generate_song_with_chatgpt(pain_text):\n    # Получаем структуру песни\n    song_structure = get_song_structure(pain_text)\n    \n    # Отправляем в ChatGPT для доработки\n    response = openai.ChatCompletion.create(\n        model=\"gpt-4\",\n        messages=[\n            {\"role\": \"system\", \"content\": \"You are the Gardener of Eden. Create healing songs.\"},\n            {\"role\": \"user\", \"content\": f\"Create a song based on this structure: {song_structure}\"}\n        ]\n    )\n    \n    return response.choices[0].message.content"
+      }
+    },
+    "rate_limits": {
+      "free_tier": {
+        "requests_per_hour": 100,
+        "requests_per_day": 1000
+      },
+      "premium_tier": {
+        "requests_per_hour": 1000,
+        "requests_per_day": 10000
+      }
+    },
+    "privacy": {
+      "data_collection": "Минимальная — только для улучшения сервиса",
+      "data_storage": "Анонимизированные данные",
+      "data_sharing": "Только с согласия пользователя",
+      "data_deletion": "По запросу пользователя"
+    },
+    "support": {
+      "documentation": "https://github.com/eden-songs/library",
+      "issues": "https://github.com/eden-songs/library/issues",
+      "community": "https://discord.gg/eden-songs",
+      "email": "support@eden-songs.org"
+    }
+  }
+}
